@@ -1,0 +1,11 @@
+.land {
+  fill: black;
+}
+
+
+.state-boundries {
+  stroke: "white";
+  stroke-width: .25px;
+}
+
+

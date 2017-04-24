@@ -6,10 +6,27 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
+    	<style>
+		#keys{
+			display: block;
+			float: left; 
+			width: 100%;
+		}
+	</style>
   </head>
   <body>
     <h1>Industry VS Population</h1>
     <script type="text/javascript" src="visualization.js"></script>
+    <div id="keys">
+	<div>Select Industry</div>
+        <div> 
+		<select name="industry">
+		 	<option value="technology">Technology(Silicon Valley)</option>
+		 	<option value="automotive">Automotive Industry(Detroit)</option>
+		 	<option value="mining">Mining(Gold rush in Carlifornia)</option>
+		</select>
+	</div>
+    </div>
   </body>
 </html>
 

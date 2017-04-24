@@ -1,0 +1,7 @@
+#source: http://www.sfgenealogy.com/sf/history/hgpop.htm
+
+1848: 850
+1849: 25000
+1850: 21000
+1852: 36151
+1860: 56802

@@ -8,24 +8,36 @@ var path = d3.geoPath().projection(projection);
 var svg = d3.select("body").append("svg")
   .attr("width", svg_width - 50)
   .attr("height", svg_height)
-    .attr('style', 'border:solid 3px #212121; padding: 30px 0; margin: 15px 0');
+  .attr('style', 'border:solid 3px #212121; padding: 30px 0; margin: 15px 0');
 
 
-d3.json('us.json', function(error, usa) {
-  svg.append('path')
-     .datum(topojson.feature(usa, usa.objects.land))
-     .attr('class', 'land')
-     .attr('d', path);
+d3.queue()
+  .defer(d3.json, "us.json")
+  .defer(d3.csv, "data/detroit.csv")
+  .defer(d3.csv, "data/goldrush.csv")
+  .defer(d3.csv, "data/northdakota.csv")
+  .await(function(error, usa, detroit,SF,ndakota) {
 
-  svg.append('g')
-     .attr('class', 'state-boundries')
-     .selectAll('path')
-     .data(topojson.feature(usa, usa.objects.states).features)
-     .enter()
-     .append('path')
-     .attr('fill','white')
-     .attr('d', path)
-      .attr('stroke', "#212121")
-      .attr('stroke-width', 2);
+        if (error) console.error('error loading data: ' + error);
+        else 
+        {
 
+          d3.select("#dropdown").on('change',function() { console.log("changed");});
+
+          svg.append('path')
+             .datum(topojson.feature(usa, usa.objects.land))
+             .attr('class', 'land')
+             .attr('d', path);
+
+          svg.append('g')
+             .attr('class', 'state-boundries')
+             .selectAll('path')
+             .data(topojson.feature(usa, usa.objects.states).features)
+             .enter()
+             .append('path')
+             .attr('fill','white')
+             .attr('d', path)
+             .attr('stroke', "#212121")
+             .attr('stroke-width', 2);
+        }
 });

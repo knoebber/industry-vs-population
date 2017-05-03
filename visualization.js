@@ -6,8 +6,9 @@ var projection = d3.geoAlbersUsa();
 var path = d3.geoPath().projection(projection);
 // Generate an SVG element on the page
 var svg = d3.select("body").append("svg")
-  .attr("width", svg_width)
-  .attr("height", svg_height);
+  .attr("width", svg_width - 50)
+  .attr("height", svg_height)
+    .attr('style', 'border:solid 3px #212121; padding: 30px 0; margin: 15px 0');
 
 
 d3.json('us.json', function(error, usa) {

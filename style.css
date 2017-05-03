@@ -8,4 +8,9 @@
   stroke-width: .25px;
 }
 
+#industry, #year{
+  display: block;
+  float: left;
+  margin-right: 25px;
+}
 

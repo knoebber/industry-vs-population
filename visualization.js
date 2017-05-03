@@ -15,7 +15,7 @@ d3.queue()
   .defer(d3.json, "us.json")
   .defer(d3.csv, "data/detroit.csv")
   .defer(d3.csv, "data/goldrush.csv")
-  .defer(d3.csv, "data/northdakota.csv")
+  .defer(d3.csv, "data/northdakotapop.csv")
   .await(function(error, usa, detroit,SF,ndakota) {
 
         if (error) console.error('error loading data: ' + error);

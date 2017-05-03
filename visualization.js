@@ -23,7 +23,8 @@ d3.json('us.json', function(error, usa) {
      .enter()
      .append('path')
      .attr('fill','white')
-     .attr('d', path);
+     .attr('d', path)
+      .attr('stroke', "#212121")
+      .attr('stroke-width', 2);
 
 });
-

@@ -8,7 +8,49 @@ var path = d3.geoPath().projection(projection);
 var sanFranXY = projection([-122.4194,37.7749]); 
 var detroitXY = projection([-83.04,42.33]);
 var nDakotaXY = projection([-102.84,47.57]); 
+function makeGraph(data) {
+  var xscale = d3.scaleLinear()
+                 .domain([d3.min(data,d=>parseInt(data.Year)),
+                          d3.max(data,d=>parseInt(data.Year))])
+                 .range([margin,graphWidth+margin]);
 
+  console.log(d3.min(data,d=>parseInt(d.data)));
+
+  var yscale = d3.scaleLinear()
+                 .domain([d3.min(data,d=>parseInt(d.Population)),
+                          d3.max(data,d=>parseInt(d.Population))])
+                 .range([graphHeight+margin,margin]);
+  /*
+  svg.selectAll('circle')
+     .data(data)
+     .enter()
+     .append('circle')
+     .attr('cx', d=>xscale(d.Year))
+     .attr('cy', d=>yscale(d.Population))
+     .attr('r', 3)
+     */
+  var xaxis = d3.axisBottom(xscale);
+  var yaxis = d3.axisLeft(yscale).tickFormat(d=> d);
+  //draw lines
+  svg.append('g')
+     .attr('transform', 'translate(0,'+ (graphHeight+margin) + ')')
+     .call(xaxis);
+   svg.append('g')
+      .attr('transform', 'translate(' + margin +',0)')
+      .call(yaxis);
+   /*                                                
+   svg.append('text')
+   .attr('transform', 'translate(' + ((graphWidth / 2) + margin)
+   + ', ' + (graphHeight + 1.8 * margin)  + ')')
+   .attr('text-anchor','middle')
+   .text('Listings');
+   svg.append('text')
+   .attr('transform', 'translate('+ (0.25 * margin) + ', '
+   + ((graphHeight / 2) + margin) + ')' + 'rotate(-90)')
+   .attr('text-anchor','middle')
+   .text('Median House Price');
+*/
+}
 function drawCircle(coordinates) {
   svg.selectAll('circle').remove();
   svg.append('circle')

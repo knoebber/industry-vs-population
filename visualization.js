@@ -5,13 +5,20 @@ var svg_height = window.innerHeight;
 var projection = d3.geoAlbersUsa();
 var path = d3.geoPath().projection(projection);
 //coordinates of cities we will be looking at
-var sanFranXY = projection([37.46,122.55]); //these seem to be wrong
+var sanFranXY = projection([-122.4194,37.7749]); 
 var detroitXY = projection([-83.04,42.33]);
-var nDakotaXY = projection([47.57,102.84]); //and this oen
-console.log(sanFranXY);
-console.log(detroitXY);
-console.log(nDakotaXY);
+var nDakotaXY = projection([-102.84,47.57]); 
 
+function drawCircle(coordinates) {
+  svg.selectAll('circle').remove();
+  svg.append('circle')
+     .attr('r',4)
+     .attr('cx',coordinates[0])
+     .attr('cy',coordinates[1])
+     .attr('fill','none')
+     .attr('stroke','red')
+     .attr('stroke-width','2');
+}
 // Generate an SVG element on the page
 var svg = d3.select("body").append("svg")
   .attr("width", svg_width - 50)
@@ -33,15 +40,15 @@ d3.queue()
           d3.select("#dropdown").on('change',function() { 
             switch(this.value){
               case 'automotive' :
-                svg.append('circle')
-                   .attr('r',4)
-                   .attr('cx',detroitXY[0])
-                   .attr('cy',detroitXY[1])
-                   .attr('fill','none')
-                   .attr('stroke','red')
-                   .attr('stroke-width','2');
+                drawCircle(detroitXY); 
                 break;
-                }
+              case 'mining' :
+                drawCircle(sanFranXY);
+                break;
+              case 'oil' :
+                drawCircle(nDakotaXY); 
+                break;
+             }
           });
 
           svg.append('path')

@@ -7,37 +7,58 @@ var path = d3.geoPath().projection(projection);
 //coordinates of cities we will be looking at
 var sanFranXY = projection([-122.4194,37.7749]); 
 var detroitXY = projection([-83.04,42.33]);
-var nDakotaXY = projection([-102.84,47.57]); 
+var nDakotaXY = projection([-102.84,47.57]);
 
-function drawCircle(coordinates) {
+var currentIdustry = null;
+
+function getPopnBound(cityData){
+    var min = 0, max = 0;
+    for(var x = 0; x < cityData.length; x++) {
+        min = Math.min(min, cityData[x].Population);
+        max = Math.max(max, cityData[x].Population);
+    }
+    return {
+        min:min, max:max
+    };
+}
+
+function calculateCircleSize(population, bounds) {
+    return (population - bounds.min) / (bounds.max - bounds.min) * 20 + 5;
+
+}
+
+function drawCircle(coordinates, population, bounds) {
   svg.selectAll('circle').remove();
   svg.append('circle')
-     .attr('r',4)
+     .attr('r', calculateCircleSize(population, bounds))
      .attr('cx',coordinates[0])
      .attr('cy',coordinates[1])
-     .attr('fill','none')
-     .attr('stroke','red')
+     .attr('fill','#555')
+     .attr('stroke','#000000')
      .attr('stroke-width','2');
 }
 
+/**
+ * updates the year select options
+ * @param data
+ */
 function updateYearSelect(data) {
-  d3.select('#year-dropdown')
-    .selectAll('option')
-    .remove();
+    d3.select('#year-dropdown')
+        .selectAll('option').remove();
+    d3.select('#year-dropdown')
+        .selectAll('option')
+        .data(data)
+        .enter()
+        .append('option')
+        .attr('value', (d, i) => i)
+.text(d=>d.Year);
+}
 
-  d3.select('#year-dropdown')
-    .selectAll('option')
-    .data(data)
-    .enter()
-    .append('option')
-    .attr('value', d => d.Year)
-    .text(d=>d.Year);
-}   
 // Generate an SVG element on the page
 var svg = d3.select('body').append('svg')
   .attr('width', svg_width - 50)
   .attr('height', svg_height)
-  .attr('style', 'border:solid 3px #212121; padding: 30px 0; margin: 15px 0');
+  .attr('style', 'border:solid 3px #212121; padding: 30px 0; margin: 15px 0');//1849568
 
 
 d3.queue()
@@ -51,23 +72,43 @@ d3.queue()
         else
         {
 
-          d3.select('#industry-dropdown').on('change',function() { 
-            var yearSelect = d3.select('#year-dropdown');
-            switch(this.value){
+          d3.select('#industry-dropdown').on('change',function() {
+              currentIdustry = this.value;
+            var year = document.getElementById("year-dropdown").value;
+            //console.log();
+            switch(currentIdustry){
               case 'automotive' :
-               drawCircle(detroitXY); 
-               updateYearSelect(detroit);
+               drawCircle(detroitXY, detroit[0].Population, getPopnBound(detroit));
+               updateYearSelect(detroit, 0);
                break;
               case 'mining' :
-                drawCircle(sanFranXY);
-                updateYearSelect(SF);
+                drawCircle(sanFranXY, SF[0].Population, getPopnBound(SF));
+                updateYearSelect(SF, 0);
                 break;
               case 'oil' :
-                drawCircle(nDakotaXY); 
-                updateYearSelect(ndakota);
+                drawCircle(nDakotaXY, ndakota[0].Population, getPopnBound(ndakota));
+                updateYearSelect(ndakota, 0);
                 break;
              }
           });
+
+            d3.select('#year-dropdown').on('change',function() {
+                //console.log();
+                switch(currentIdustry){
+                    case 'automotive' :
+                        drawCircle(detroitXY, detroit[this.value].Population, getPopnBound(detroit));
+                        updateYearSelect(detroit, this.value);
+                        break;
+                    case 'mining' :
+                        drawCircle(sanFranXY, SF[this.value].Population, getPopnBound(SF));
+                        updateYearSelect(SF, this.value);
+                        break;
+                    case 'oil' :
+                        drawCircle(nDakotaXY, ndakota[this.value].Population, getPopnBound(ndakota));
+                        updateYearSelect(ndakota, this.value);
+                        break;
+                }
+            });
 
           svg.append('path')
              .datum(topojson.feature(usa, usa.objects.land))

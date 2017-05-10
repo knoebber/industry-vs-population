@@ -5,6 +5,7 @@
     <title>Industry VS Population</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     	<style>
 		#keys{
@@ -15,7 +16,7 @@
 	</style>
   </head>
   <body>
-    <h1 style="text-decoration: underline">Industry VS Population</h1>
+    <h1>Industry VS Population</h1>
     <div id="industry">
         <b>Select Industry</b>
         <div>
@@ -23,6 +24,7 @@
                 <option value="null">Select Industry</option>
                 <option value="automotive">Automotive Industry(Detroit)</option>
                 <option value="mining">Mining(Gold rush in California)</option>
+                <option value="technology">Technology(Internet Boom in the Bay Area)</option>
 		            <option value="oil">Oil Boom (North Dakota)</option>
             </select>
         </div>
@@ -34,8 +36,12 @@
                 <option value="0">Choose Year</option>
             </select>
         </div>
-    <div id="keys"> </div>
+    </div>
     <script type="text/javascript" src="visualization.js"></script>
+    <div id="graph-container">
+        <h2 id="graph-title">The change of population over the years</h2>
+        <img src="./data/dakota.png" id="graph"/>
+    </div>
   </body>
 </html>
 

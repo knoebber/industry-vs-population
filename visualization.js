@@ -23,7 +23,7 @@ function getPopnBound(cityData){
 }
 
 function calculateCircleSize(population, bounds) {
-    return (population - bounds.min) / (bounds.max - bounds.min) * 20 + 5;
+    return (population - bounds.min) / (bounds.max - bounds.min) * 20 * 2.5;
 
 }
 
@@ -33,9 +33,10 @@ function drawCircle(coordinates, population, bounds) {
      .attr('r', calculateCircleSize(population, bounds))
      .attr('cx',coordinates[0])
      .attr('cy',coordinates[1])
-     .attr('fill','#555')
-     .attr('stroke','#000000')
-     .attr('stroke-width','2');
+     .attr('fill','#212121')
+     .attr('stroke','#949494')
+     .attr('stroke-width','3')
+      .attr('cursor','pointer');
 }
 
 /**
@@ -43,8 +44,7 @@ function drawCircle(coordinates, population, bounds) {
  * @param data
  */
 function updateYearSelect(data) {
-    d3.select('#year-dropdown')
-        .selectAll('option').remove();
+    //d3.select('#year-dropdown').selectAll('option').remove();
     d3.select('#year-dropdown')
         .selectAll('option')
         .data(data)
@@ -54,19 +54,31 @@ function updateYearSelect(data) {
 .text(d=>d.Year);
 }
 
+/**
+ * loads the population vs years graph for the industry if interest
+ * @param prompt
+ * @param src
+ */
+function loadGraph(prompt, src) {
+    $("#graph-title").text(prompt);
+    $("#graph").attr("src", src);
+    $("#graph-container").show();
+}
+
 // Generate an SVG element on the page
 var svg = d3.select('body').append('svg')
   .attr('width', svg_width - 50)
   .attr('height', svg_height)
-  .attr('style', 'border:solid 3px #212121; padding: 30px 0; margin: 15px 0');//1849568
+  .attr('style', 'border:solid 3px #949494; padding: 30px 0; margin: 15px 0');//1849568
 
 
 d3.queue()
   .defer(d3.json, 'us.json')
-  .defer(d3.csv, 'data/detroit.csv')
+  .defer(d3.csv, 'data/detroitpopn.csv')
   .defer(d3.csv, 'data/goldrush.csv')
-  .defer(d3.csv, 'data/northdakotapop.csv')
-  .await(function(error, usa, detroit,SF,ndakota) {
+    .defer(d3.csv, 'data/dakota.csv')
+    .defer(d3.csv, 'data/sanfran.csv')
+  .await(function(error, usa, detroit,SF,ndakota,valley) {
 
         if (error) console.error('error loading data: ' + error);
         else
@@ -79,14 +91,22 @@ d3.queue()
             switch(currentIdustry){
               case 'automotive' :
                drawCircle(detroitXY, detroit[0].Population, getPopnBound(detroit));
+               loadGraph("Population of Detroit over the years", "data/detroit.png");
                updateYearSelect(detroit, 0);
                break;
-              case 'mining' :
-                drawCircle(sanFranXY, SF[0].Population, getPopnBound(SF));
-                updateYearSelect(SF, 0);
-                break;
+                case 'mining' :
+                    drawCircle(sanFranXY, SF[0].Population, getPopnBound(SF));
+                    loadGraph("Population of California during the gold rush", "data/goldrush.png");
+                    updateYearSelect(SF, 0);
+                    break;
+                case 'technology' :
+                    drawCircle(sanFranXY, valley[0].Population, getPopnBound(valley));
+                    loadGraph("Population of San Fransisco Bay Area", "data/tech.png");
+                    updateYearSelect(valley, 0);
+                    break;
               case 'oil' :
                 drawCircle(nDakotaXY, ndakota[0].Population, getPopnBound(ndakota));
+                  loadGraph("Population of North Dakota over the years", "data/dakota.png");
                 updateYearSelect(ndakota, 0);
                 break;
              }
@@ -102,6 +122,10 @@ d3.queue()
                     case 'mining' :
                         drawCircle(sanFranXY, SF[this.value].Population, getPopnBound(SF));
                         updateYearSelect(SF, this.value);
+                        break;
+                    case 'technology' :
+                        drawCircle(sanFranXY, valley[this.value].Population, getPopnBound(valley));
+                        updateYearSelect(valley, this.value);
                         break;
                     case 'oil' :
                         drawCircle(nDakotaXY, ndakota[this.value].Population, getPopnBound(ndakota));
@@ -121,9 +145,9 @@ d3.queue()
              .data(topojson.feature(usa, usa.objects.states).features)
              .enter()
              .append('path')
-             .attr('fill','white')
+             .attr('fill','#111111')
              .attr('d', path)
-             .attr('stroke', '#212121')
+             .attr('stroke', '#949494')
              .attr('stroke-width', 2);
         }
 });

@@ -14,3 +14,25 @@
   margin-right: 25px;
 }
 
+#graph-container{
+  display: none;
+  float: left;
+  width: 100%;
+}
+
+
+#graph{
+  display: block;
+  float: left;
+  width: 50%;
+}
+body{
+  background-color: #212121;
+  color: #949494;
+}
+
+select{
+  background-color: #212121;
+  color: #949494;
+  font-size: 15px;
+}

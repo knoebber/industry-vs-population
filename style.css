@@ -43,3 +43,15 @@ select{
 .selection-header{
   font-size: 25px;
 }
+
+#info-popup-box{
+  display: none;
+  background-color: #1a1a1a;
+  position: fixed;
+  top: 0;
+  /*display: block;*/
+  float: left;
+  padding: 10px;
+  border: solid 3px #949494;
+  border-radius: 5px;
+}

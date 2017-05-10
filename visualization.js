@@ -71,6 +71,14 @@ var svg = d3.select('body').append('svg')
   .attr('height', svg_height)
   .attr('style', 'border:solid 3px #949494; padding: 30px 0; margin: 15px 0');//1849568
 
+function getMousePosition(){
+    return d3.mouse(this);
+}
+
+function showPopulationAndYear(population, year) {
+
+}
+
 
 d3.queue()
   .defer(d3.json, 'us.json')

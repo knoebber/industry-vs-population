@@ -145,7 +145,7 @@ d3.queue()
              .data(topojson.feature(usa, usa.objects.states).features)
              .enter()
              .append('path')
-             .attr('fill','#111111')
+             .attr('fill','#1a1a1a')
              .attr('d', path)
              .attr('stroke', '#949494')
              .attr('stroke-width', 2);

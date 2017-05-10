@@ -27,7 +27,17 @@ function calculateCircleSize(population, bounds) {
 
 }
 
-function drawCircle(coordinates, population, bounds) {
+
+
+function showPopulationAndYear(population, year) {
+	$("#year-info").text(year);
+	$("#popn-info").text(population);
+	$("#info-popup-box").css("top", d3.event.clientY + "px");
+	$("#info-popup-box").css("left", d3.event.clientX + "px");
+	$("#info-popup-box").show();
+}
+
+function drawCircle(coordinates, population, bounds, year) {
   svg.selectAll('circle').remove();
   svg.append('circle')
      .attr('r', calculateCircleSize(population, bounds))
@@ -36,7 +46,11 @@ function drawCircle(coordinates, population, bounds) {
      .attr('fill','#212121')
      .attr('stroke','#949494')
      .attr('stroke-width','3')
-      .attr('cursor','pointer');
+      .attr('cursor','pointer')
+	.on("mouseover", function(){showPopulationAndYear(population, year)})
+            .on("mouseout", function(){
+	$("#info-popup-box").hide();
+		});
 }
 
 /**
@@ -71,14 +85,6 @@ var svg = d3.select('body').append('svg')
   .attr('height', svg_height)
   .attr('style', 'border:solid 3px #949494; padding: 30px 0; margin: 15px 0');//1849568
 
-function getMousePosition(){
-    return d3.mouse(this);
-}
-
-function showPopulationAndYear(population, year) {
-
-}
-
 
 d3.queue()
   .defer(d3.json, 'us.json')
@@ -98,22 +104,22 @@ d3.queue()
             //console.log();
             switch(currentIdustry){
               case 'automotive' :
-               drawCircle(detroitXY, detroit[0].Population, getPopnBound(detroit));
+               drawCircle(detroitXY, detroit[0].Population, getPopnBound(detroit), detroit[0].Year);
                loadGraph("Population of Detroit over the years", "data/detroit.png");
                updateYearSelect(detroit, 0);
                break;
                 case 'mining' :
-                    drawCircle(sanFranXY, SF[0].Population, getPopnBound(SF));
+                    drawCircle(sanFranXY, SF[0].Population, getPopnBound(SF), SF[0].Year);
                     loadGraph("Population of California during the gold rush", "data/goldrush.png");
                     updateYearSelect(SF, 0);
                     break;
                 case 'technology' :
-                    drawCircle(sanFranXY, valley[0].Population, getPopnBound(valley));
+                    drawCircle(sanFranXY, valley[0].Population, getPopnBound(valley), valley[0].Year);
                     loadGraph("Population of San Fransisco Bay Area", "data/tech.png");
                     updateYearSelect(valley, 0);
                     break;
               case 'oil' :
-                drawCircle(nDakotaXY, ndakota[0].Population, getPopnBound(ndakota));
+                drawCircle(nDakotaXY, ndakota[0].Population, getPopnBound(ndakota), ndakota[0].Year);
                   loadGraph("Population of North Dakota over the years", "data/dakota.png");
                 updateYearSelect(ndakota, 0);
                 break;
@@ -124,19 +130,19 @@ d3.queue()
                 //console.log();
                 switch(currentIdustry){
                     case 'automotive' :
-                        drawCircle(detroitXY, detroit[this.value].Population, getPopnBound(detroit));
+                        drawCircle(detroitXY, detroit[this.value].Population, getPopnBound(detroit), detroit[this.value].Year);
                         updateYearSelect(detroit, this.value);
                         break;
                     case 'mining' :
-                        drawCircle(sanFranXY, SF[this.value].Population, getPopnBound(SF));
+                        drawCircle(sanFranXY, SF[this.value].Population, getPopnBound(SF), SF[this.value].Year);
                         updateYearSelect(SF, this.value);
                         break;
                     case 'technology' :
-                        drawCircle(sanFranXY, valley[this.value].Population, getPopnBound(valley));
+                        drawCircle(sanFranXY, valley[this.value].Population, getPopnBound(valley), valley[this.value].Year);
                         updateYearSelect(valley, this.value);
                         break;
                     case 'oil' :
-                        drawCircle(nDakotaXY, ndakota[this.value].Population, getPopnBound(ndakota));
+                        drawCircle(nDakotaXY, ndakota[this.value].Population, getPopnBound(ndakota), ndakota[this.value].Year);
                         updateYearSelect(ndakota, this.value);
                         break;
                 }
